@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
-import {View,Text,FlatList,TouchableOpacity,TextInput,StyleSheet,Image,ActivityIndicator} from "react-native";
+import {View,Text,FlatList,TouchableOpacity,TextInput,StyleSheet,Image,ActivityIndicator, BackHandler} from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import   Icon from "react-native-vector-icons/MaterialIcons"
+import   Icon1 from "react-native-vector-icons/Feather"
 
+// My Components 
 import FetchAxios from "../CustomHooks/FetchAxios";
-
-// const translate = require('google-translate-api');
-    const flag=0
-    
+import Colors from  "../constants/Colors";
 const Home =()=>{
         
     const {isLoading,data} =FetchAxios()
     const [search, setSearch] = useState("");
     const [rtl, setRtl] = useState(false);
+    const [isDark,setIsDark] =useState(true)
    
     if(isLoading){
         return(
             <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-                <Text style={{color:'orange',fontSize:20,fontWeight:'500'}}> Fetching data ... </Text>
-                <ActivityIndicator size="large" color="orange" />
+                <Text style={{color:Colors.orange,fontSize:20,fontWeight:'500'}}> Fetching data ... 
+                    <ActivityIndicator size="large" color={Colors.dark} />
+                </Text>
             </View>
         )
     }
@@ -27,21 +29,29 @@ const Home =()=>{
 
     return(
 
-            <KeyboardAwareScrollView keyboardShouldPersistTaps='never' style={{flex:1,marginTop:40,}}>
+            <KeyboardAwareScrollView keyboardShouldPersistTaps='never' style={{flex:1,marginTop:40,backgroundColor:isDark ? Colors.dark : Colors.white}}>
 
-                <View style={{flex:0.2,alignItems:'center',justifyContent:'center'}}>
+                <View style={{flex:0.2,height:70,flexDirection:"row",alignItems:'center',justifyContent:'flex-start',}}>
                     
-                    <Text style={{alignSelf:'center',fontSize:23,fontWeight:'500',color:'orange'}}  > Read with Booklers</Text>
+                    <Text style={{flex:0.7,marginLeft:25,alignSelf:'center',fontSize:23,fontWeight:'500',color: isDark ? Colors.white : Colors.dark}}  > Read with Booklers</Text>
+                    <View style={{flex:0.3,flexDirection:'row',alignItems:'center',justifyContent:'center',}}>
+                        <TouchableOpacity style={{}} onPress={() => setIsDark(!isDark)}>
+                                { isDark ? <Icon1 name="sun" size={30} color={Colors.white} /> : <Icon name="dark-mode" size={30} color={Colors.dark} />    }
+                                 {/* <Icon1 name="sun" size={30} color={Colors.white} />  */}
+                           
+                            
+                        </TouchableOpacity>
 
+                    </View>
                 </View>
                 <View style={{flex:0.1,flexDirection:'row',marginVertical:20,alignItems:'center',justifyContent:'center'}}>
                 
-                    <TextInput placeholder="Enter book title to search" placeholderTextColor='orange' style={styles.searchBar}
+                    <TextInput placeholder="Enter book title to search" placeholderTextColor={isDark ? Colors.white : Colors.dark} style={[{color: isDark? Colors.white : Colors.dark, },styles.searchBar]}
                     value={search}
                     onChangeText={setSearch}></TextInput>
 
-                    <TouchableOpacity style={styles.langButton} onPress={() => setRtl(!rtl)}> 
-                        <Text style={{color:'white'}} > {rtl ? "To English" : "To Urdu"}</Text>
+                    <TouchableOpacity style={[styles.langButton,{backgroundColor: isDark ? Colors.white : Colors.orange}]} onPress={() => setRtl(!rtl)}> 
+                        <Text style={{color: isDark ? Colors.dark : Colors.white,fontWeight:'500',fontSize:14}} > {rtl ? "To English" : "To Urdu"}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -94,6 +104,7 @@ const Home =()=>{
 const styles = StyleSheet.create({
 
     searchBar :{
+        
         borderWidth:2,
         borderColor:'orange',
         height:40,
@@ -104,7 +115,7 @@ const styles = StyleSheet.create({
         borderRadius:30
     },
     langButton:{
-        backgroundColor:'orange',
+        
         width:'20%',
         height:40,
         borderRadius:20,
