@@ -11,7 +11,7 @@ const FetchAxios = ()=>{
         const fetching = async()=>{
             await axios.get('https://dev.iqrakitab.net/api/books').then(response =>{
                 if(response){
-                    console.log("Books data fetched is ==> \n",response.data.data)
+                    console.log("Books data fetched is ==> \n",(response.data.data[0]))
                     setData(response.data.data)
                     setLoading(false)
                 }
